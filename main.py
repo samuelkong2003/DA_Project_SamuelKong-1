@@ -16,7 +16,8 @@ import pandas as pd
 #########################################################################
 #IMPORT Pandas Library for Data Analysis
 #########################################################################
-
+#import matplotlib for pie chart
+import matplotlib.pyplot as pit
 #########################################################################
 #CLASS Branch - Data Analysis
 #load excel data (CSV format) to dataframe
@@ -45,18 +46,46 @@ def sortCountry(df):
   print("The following dataframe are read as follows: \n")
   print(df)
 
-  #Filter countries
-  c_df = df.iloc[]
+  #Slicing
+  c_df = df[['Year','Month'] + df.iloc[:, 20: 31].columns.tolist()]
   
-  #display a specific country (Australia) in column #33
-  country_label = df.columns[33]
-  print("\n\n" + country_label + "was selected.")
+  #Form a new database based on new index
+  c_df = c_df.reset_index(drop=True)
+  
+  #Display selected countries
+  print("The following new dataframe for Europe from 1996 - 2006 are read as follows: \n")
+  print(c_df) 
 
+  #Sort countries base on ascending order
+  top3countries = c_df.iloc[:, 2:13].sum(axis=0).sort_values(ascending=False).nlargest(3).reset_index()
 
-  #display a sorted dataframe based on selected country
-  print(country_label + "was sorted in ascending order. \n")
-  sorted_df =df.sort_values(country_label,ascending=[0])
-  print(sorted_df)
+  #sort sum value output into columns based on country and visitors
+  top3countries.columns = ['Country', 'Visitors']
+  #change index to represent top 3
+  top3countries.index = ['Most Visted →', 'Second Most Visted → ', 'Third Most Visted →']
+
+  #Pie Chart
+  Activities = ['United Kingdom', 'Germany', 'France']
+  #Pie Chart information
+  slices = [13507316, 6412786, 3386103]
+
+  pit.pie(slices, 
+          labels = Activities,
+          startangle = 90,
+          shadow = True,
+          explode = (0.2, 0, 0),
+          autopct = '%1.2f%%')
+  pit.legend()
+  
+  #Display Pie Chart
+  pit.show
+  
+  #Display most visitors from 1996 to 2016
+  print("\nThe top 3 countries with the most visitors coming to Singapore listed in Europe from 1996 to 2016 are read as follows:\n")
+
+  #display top 3
+  print(top3countries)
+  
 
   return
 #########################################################################
